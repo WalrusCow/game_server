@@ -5,6 +5,7 @@ import games
 app = Flask(__name__)
 gameServer = games.Server()
 gameServer.registerGame('hangman', games.Hangman)
+gameServer.registerGame('challenge', games.Challenge)
 
 def hasKeys(keyList):
     ''' Decorate a route to return error if the given json does not contain

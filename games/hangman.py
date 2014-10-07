@@ -1,6 +1,6 @@
 import random
 
-from games.states import State
+from .states import State
 
 class HangmanState(State):
     # Some random words
