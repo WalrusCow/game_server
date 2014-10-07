@@ -1,13 +1,14 @@
-from TokenSet import TokenSet
-from StateSet import StateSet
+from games.tokenSet import TokenSet
+from games.states import StateSet
+from games.stats import Stats
 
-class GameServer():
+class Server():
     def __init__(self):
         self._games = dict()
         self._users = set()
         self._tokens = TokenSet()
         self._gameStates = StateSet()
-        #self._stats = Stats()
+        self._stats = Stats()
 
     def registerUser(self, user):
         if user in self._users:
@@ -41,9 +42,33 @@ class GameServer():
         if state.gameOver:
             self._tokens.removeToken(user, game)
             if state.userWon:
-                #self._stats.addWin(user, game)
+                self._stats.addWin(user, game)
                 pass
             else:
-                #self._stats.addLoss(user, game)
+                self._stats.addLoss(user, game)
                 pass
         return state
+
+    def getStats(self, user=None, game=None):
+        ''' Get stats for all users, or specified user. '''
+        stats = dict()
+        if user is None:
+            # All stats
+            for user in self._users:
+                stats[user] = dict()
+                for game in self._games:
+                    stats[user][game] = self._stats.get(user, game).toDict()
+        elif game is None:
+            # Stats for one user
+            if user not in self._users:
+                return dict()
+            stats[user] = dict()
+            for game in self._games:
+                stats[user][game] = self._stats.get(user, game).toDict()
+        else:
+            # Stats for one user and one game
+            if game not in self._games or user not in self._users:
+                return dict()
+            stats[user] = dict()
+            stats[user][game] = self._stats.get(user, game).toDict()
+        return stats

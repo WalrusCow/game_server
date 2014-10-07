@@ -1,4 +1,13 @@
+class State():
+    def __init__(self):
+        self.gameOver = False
+        self.userWon = False
+
+    def toDict(self):
+        return { 'gameOver' : self.gameOver, 'won' : self.userWon }
+
 class StateSet():
+    ''' Encapsulate the game states. '''
     def __init__(self):
         self._states = dict()
     def __delitem__(self, tpl): del self._states[tpl]

@@ -1,8 +1,8 @@
 import random
 
-from GameState import GameState
+from games.states import State
 
-class HangmanState(GameState):
+class HangmanState(State):
     # Some random words
     _words = ['cousin', 'garrulous', 'maleficent', 'impairment', 'sneaker',
               'liableness', 'association', 'catechism', 'effigies', 'pork',

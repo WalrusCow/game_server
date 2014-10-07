@@ -3,8 +3,9 @@ from datetime import datetime, timedelta
 from random import randint
 
 class TokenSet():
+    ''' Encapsulate the tokens. '''
     class Token():
-        _keyLength = 32
+        _keyLength = 16
         def __init__(self, keyLength=_keyLength):
             def randomBytes(n):
                 # Note: Not cryptographically secure
