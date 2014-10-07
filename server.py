@@ -2,7 +2,7 @@ import functools
 
 from flask import Flask, jsonify, request
 
-from hangman import Hangman
+from Hangman import Hangman
 from GameServer import GameServer
 
 app = Flask(__name__)
@@ -29,15 +29,17 @@ def play():
     json = request.get_json(force=True)
 
     try:
-        state = gameServer.play(json['username'], json['game'], json['move'], json['token'])
+        state = gameServer.play(json['username'], json['game'], json['move'],
+                                json['token'])
         return jsonify(**state.toDict())
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         return jsonify(error=str(e))
 
 @app.route('/new/', methods=['GET', 'POST'])
 @hasKeys(['username', 'game'])
 def newGame():
-    ''' Create a new instance of `game`. '''
     json = request.get_json(force=True)
 
     try:
@@ -50,10 +52,7 @@ def newGame():
 @hasKeys(['username'])
 def signup():
     ''' Create a new user. '''
-    try:
-        json = request.get_json(force=True)
-    except Exception as e:
-        print('fuck')
+    json = request.get_json(force=True)
 
     try:
         gameServer.registerUser(json['username'])
@@ -62,4 +61,4 @@ def signup():
         return jsonify(error=str(e))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

@@ -2,9 +2,6 @@ from TokenSet import TokenSet
 from StateSet import StateSet
 
 class GameServer():
-    ''' Be the "server" for the games.
-    Note: Not actually a server, more like a registry
-    '''
     def __init__(self):
         self._games = dict()
         self._users = set()
@@ -21,23 +18,32 @@ class GameServer():
         self._games[name] = game
 
     def newGame(self, user, game):
+        if user not in self._users:
+            raise Exception('User does not exist')
+        if game not in self._games:
+            raise Exception('Game does not exist')
         if self._tokens.hasActiveToken(user, game):
             raise Exception('User has an existing game session')
         state = self._games[game].newGame()
         self._gameStates.setState(user, game, state)
-        return self._tokens.newToken(user, game), state
+        token = self._tokens.newToken(user, game)
+        return token, state
 
     def play(self, user, game, move, token):
+        if user not in self._users:
+            raise Exception('User does not exist')
+        if game not in self._games:
+            raise Exception('Game does not exist')
         if not self._tokens.isValid(user, game, token):
-            raise Exception('User does not have an active game session')
-        state = self._gameStates[user][game]
+            raise Exception('No matching game session found')
+        state = self._gameStates[(user, game)]
         state = self._games[game].play(state, move)
         if state.gameOver:
             self._tokens.removeToken(user, game)
-            if resultState.userWon:
+            if state.userWon:
                 #self._stats.addWin(user, game)
                 pass
             else:
-                pass
                 #self._stats.addLoss(user, game)
-        return resultState
+                pass
+        return state

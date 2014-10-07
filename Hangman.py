@@ -16,11 +16,11 @@ class HangmanState(GameState):
 
     def toDict(self):
         d = super().toDict()
-        d['guessed'] = self.guessed
-        d['unguessed'] = self.unguessed
+        d['guessed'] = list(self.guessed)
         d['strikes'] = self.strikes
         d['secret'] = ''.join(c if c in self.guessed else '_'
                               for c in self.secret)
+        return d
 
 class Hangman():
     ''' Hangman game class. '''
@@ -30,7 +30,7 @@ class Hangman():
 
     @staticmethod
     def play(state, move):
-        if not state.playing:
+        if state.gameOver:
             raise Exception('Game is over')
         if not isinstance(move, str) or not len(move) == 1:
             raise Exception('Invalid guess')
