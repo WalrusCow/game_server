@@ -27,7 +27,6 @@ class TokenSet():
         return self._tokens[tpl]
 
     def hasActiveToken(self, user, game):
-        #return False
         if not (user, game) in self._tokens:
             return False
         return not self._tokens[(user, game)].expired()
@@ -41,7 +40,6 @@ class TokenSet():
         del self._tokens[(user, game)]
 
     def isValid(self, user, game, token):
-        #return True
         if not self.hasActiveToken(user, game):
             return False
         return token == self._tokens[(user, game)].key

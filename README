@@ -1,0 +1,49 @@
+Simple Game Server
+==================
+
+This is a Flask app.  It comes with two games, "Challenge" and "Hangman".
+It runs on localhost:5000 by default.
+
+I wrote it in Python 3.4, so it might not run in different versions :)
+
+To run:
+  Install python 3.4
+  Install Flask: `pip install flask`
+  Run the app:
+    python3 server.py
+
+Example Interaction:
+====================
+
+~ $ curl -d '{"username":"Arthur"}' localhost:5000/signup
+{
+  "success": true
+}
+~ $ curl -d '{"username":"Arthur", "game": "challenge"}' localhost:5000/new
+{
+  "state": {
+    "challenge": "What is the airspeed velocity of an unladen swallow?",
+    "gameOver": false,
+    "won": false
+  },
+  "token": "dkHdHSAyEXGaI78ucGbVwQ=="
+}
+~ $ curl -d '{"username":"Arthur", "game": "challenge", "token": "dkHdHSAyEXGaI78ucGbVwQ==", "move": "What do you mean? African or European swallow?"}' localhost:5000/play
+{
+  "challenge": "What is the airspeed velocity of an unladen swallow?",
+  "gameOver": true,
+  "won": true
+}
+~ $ curl localhost:5000/stats
+{
+  "Arthur": {
+    "challenge": {
+      "losses": 0,
+      "wins": 1
+    },
+    "hangman": {
+      "losses": 0,
+      "wins": 0
+    }
+  }
+}
